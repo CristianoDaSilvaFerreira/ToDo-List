@@ -20,7 +20,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _toDoController = TextEditingController();
+
   List _toDoList = [];
+
+  // Método que ira criar um override que irá sobrescreve a aplicação toda vez que abri ela
+  @override
+  void initState() {
+    super.initState();
+
+    _readData().then((data) {
+      setState(() {
+        _toDoList = json.decode(data);
+      });
+    });
+  }
 
   // Função da adicionar uma tarefa
   void _addToDo() {
@@ -30,6 +43,7 @@ class _HomeState extends State<Home> {
       _toDoController.text = '';
       newToDo['ok'] = false;
       _toDoList.add(newToDo);
+      _saveData();
     });
   }
 
@@ -85,6 +99,7 @@ class _HomeState extends State<Home> {
                   onChanged: (c) {
                     setState(() {
                       _toDoList[index]['ok'] = c;
+                      _saveData();
                     });
                   },
                 );
@@ -118,6 +133,8 @@ class _HomeState extends State<Home> {
     // Verificando o arquivo
     try {
       final file = await _getFile();
+
+      return file.readAsString();
     } catch (e) {
       return null;
     }
