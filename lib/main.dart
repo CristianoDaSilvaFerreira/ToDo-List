@@ -19,14 +19,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _toDoController = TextEditingController();
   List _toDoList = [];
+
+  // Função da adicionar uma tarefa
+  void _addToDo() {
+    setState(() {
+      Map<String, dynamic> newToDo = Map();
+      newToDo['title'] = _toDoController.text;
+      _toDoController.text = '';
+      newToDo['ok'] = false;
+      _toDoList.add(newToDo);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lista de Tarefas'),
-        backgroundColor: Colors.blue[300],
+        backgroundColor: Colors.blue,
         centerTitle: true,
       ),
       body: Column(
@@ -37,17 +49,20 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: _toDoController,
                     decoration: InputDecoration(
                       labelText: 'Nova Tarefa',
-                      labelStyle: TextStyle(color: Colors.blueAccent[300]),
+                      labelStyle: TextStyle(
+                        color: Colors.blueAccent,
+                      ),
                     ),
                   ),
                 ),
                 RaisedButton(
-                  color: Colors.blueAccent[300],
+                  color: Colors.blueAccent,
                   child: Text('ADD'),
                   textColor: Colors.white,
-                  onPressed: () {},
+                  onPressed: _addToDo,
                 ),
               ],
             ),
@@ -62,12 +77,16 @@ class _HomeState extends State<Home> {
                     _toDoList[index]['title'],
                   ),
                   value: _toDoList[index]['ok'],
-                  onChanged: null,
                   secondary: CircleAvatar(
                     child: Icon(
                       _toDoList[index]['ok'] ? Icons.check : Icons.error,
                     ),
                   ),
+                  onChanged: (c) {
+                    setState(() {
+                      _toDoList[index]['ok'] = c;
+                    });
+                  },
                 );
               },
             ),
