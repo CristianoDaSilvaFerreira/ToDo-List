@@ -108,14 +108,15 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-              child: RefreshIndicator(
-            onRefresh: _refresh,
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 10),
-              itemCount: _toDoList.length,
-              itemBuilder: buildItem,
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 10),
+                itemCount: _toDoList.length,
+                itemBuilder: buildItem,
+              ),
             ),
-          )),
+          ),
         ],
       ),
     );
